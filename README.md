@@ -88,17 +88,36 @@ By using this extension, you acknowledge that:
 # Clone repository
 git clone https://github.com/calculatorlib/ga-realtime-users.git
 
-# Install dependencies (if any)
-npm install
-
-# Build extension
-npm run build
-
 # Load unpacked extension in Chrome for testing
 ```
 
-### Project Structure
+### Icon Generation
+If you're modifying the extension icon, you can generate all required sizes from the SVG file using ImageMagick:
 
+```bash
+# Install ImageMagick (if not installed)
+# On Ubuntu/Debian
+sudo apt-get install imagemagick
+
+# On macOS using Homebrew
+brew install imagemagick
+
+# On Windows using Chocolatey
+choco install imagemagick
+
+# Generate icons
+for size in 16 32 48 128; do
+  convert -background none icon.svg -resize ${size}x${size} icon${size}.png
+done
+```
+
+This will generate the following files:
+- `icon16.png` - For extension favicon and small icons
+- `icon32.png` - For slightly larger icons
+- `icon48.png` - For the extensions management page
+- `icon128.png` - For the Chrome Web Store and installation
+
+### Project Structure
 ```
 ga-realtime-users/
 ├── manifest.json        # Extension configuration
@@ -107,9 +126,21 @@ ga-realtime-users/
 ├── background.js       # Background service worker
 ├── styles/            
 │   └── popup.css       # Styles for popup
+├── icons/
+│   ├── icon.svg        # Source SVG icon
+│   ├── icon16.png      # Generated icons
+│   ├── icon32.png
+│   ├── icon48.png
+│   └── icon128.png
 └── assets/
-    └── icons/          # Extension icons
+    └── images/         # Other images
 ```
+
+### Icon Requirements
+- Format: SVG (source) and PNG (generated)
+- Dimensions: 16x16, 32x32, 48x48, and 128x128 pixels
+- Background: Transparent
+- Style: Simple and recognizable at small sizes
 
 ## Contributing
 
