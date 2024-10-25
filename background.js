@@ -1,4 +1,4 @@
-const POLLING_INTERVAL = 60000; // 10 seconds
+const POLLING_INTERVAL = 10000; // 10 seconds
 let monitoredProperties = new Map();
 let pollInterval = null;
 
