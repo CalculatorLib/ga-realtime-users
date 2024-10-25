@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GA Realtime Users</title>
+    <style>
+        body {
+            width: 360px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            color: #3c4043;
+        }
+
+        .header {
+            background: #1a73e8;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 16px 20px;
+        }
+
+        .property-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .property-name {
+            font-size: 14px;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+
+        .property-id {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .user-count {
+            font-size: 32px;
+            color: #1a73e8;
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        .add-property {
+            border-top: 1px solid #dadce0;
+            margin-top: 16px;
+            padding-top: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background: #1557b0;
+        }
+
+        .status {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .status.error {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+
+        .status.success {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #5f6368;
+            padding: 32px 16px;
+        }
+
+        .account-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1a73e8;
+            padding: 10px 20px;
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .logout-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            min-width: 80px;
+        }
+
+        .logout-btn:hover {
+            background: #1557b0;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+        <path d="M20.5 19.75A1.75 1.75 0 0 1 18.75 21H5.25A1.75 1.75 0 0 1 3.5 19.25V4.75A1.75 1.75 0 0 1 5.25 3h13.5A1.75 1.75 0 0 1 20.5 4.75zM5.25 4.5a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h13.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25z M8 9a2 2 0 1 1 4 0 2 2 0 0 1-4 0m7.12 6.879a6 6 0 1 0-8.484 0l1.768-1.768a3.5 3.5 0 1 1 4.95 0z"/>
+    </svg>
+    <div class="header-title">GA Real-Time Users</div>
+</div>
+
+<div class="account-section">
+    <div id="userEmail" class="user-email"></div>
+    <button id="logoutBtn" class="logout-btn" style="display: none;">Sign Out</button>
+</div>
+
+<div class="content">
+    <div id="propertiesList"></div>
+
+    <div class="add-property">
+        <form id="addPropertyForm">
+            <div class="form-group">
+                <label for="propertyName">Property Name</label>
+                <input type="text" id="propertyName" required placeholder="My Website">
+            </div>
+            <div class="form-group">
+                <label for="propertyId">Property ID</label>
+                <input type="text" id="propertyId" required placeholder="GA4 Property ID">
+            </div>
+            <button type="submit">Add Property</button>
+        </form>
+        <div id="status" style="display: none;"></div>
+    </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
