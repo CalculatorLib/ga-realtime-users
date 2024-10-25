@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "GA Realtime Users",
   "version": "1.0",
-  "description": "Monitor multiple Google Analytics properties in real-time",
+  "description": "Shows realtime user data from Google Analytics",
   "permissions": [
     "identity",
     "storage",
@@ -19,7 +19,6 @@
     "client_id": "594899345250-06vnmiddlb5nq0udoc0g6dsnnpqaqniq.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/analytics.readonly",
-      "https://www.googleapis.com/auth/analytics",
       "https://www.googleapis.com/auth/userinfo.email"
     ]
   }

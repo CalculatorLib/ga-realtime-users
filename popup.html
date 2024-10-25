@@ -25,6 +25,7 @@
 
         .content {
             padding: 16px 20px;
+            margin-bottom: 5rem;
         }
 
         .property-card {
@@ -142,6 +143,31 @@
         .logout-btn:hover {
             background: #1557b0;
         }
+
+        .footer {
+            padding: 12px 16px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e8eaed;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #5f6368;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-content:hover {
+            color: #1a73e8;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -152,7 +178,7 @@
             <path d="M35.1010243,213.193238 C54.4867848,213.193238 70.2020487,228.908502 70.2020487,248.294263 C70.2020487,267.680023 54.4867848,283.395287 35.1010243,283.395287 C15.7152639,283.395287 0,267.680023 0,248.294263 C0,228.908502 15.7152639,213.193238 35.1010243,213.193238 Z M127.459466,106.806429 C107.981896,107.874068 92.8698765,124.212107 93.3217628,143.713681 L93.3217628,237.998765 C93.3217628,263.58699 104.580582,279.120548 121.077461,282.431965 C131.434034,284.530959 142.185473,281.860819 150.356699,275.160414 C158.527925,268.460009 163.252393,258.439904 163.222912,247.872809 L163.222912,142.088076 C163.240039,132.641687 159.462041,123.584285 152.737293,116.950107 C146.012546,110.315928 136.904752,106.661084 127.459466,106.806429 L127.459466,106.806429 Z" fill="#E37400"></path>
         </g>
     </svg>
-    <div class="header-title">GA Real-Time Users</div>
+    <div class="header-title">GA Realtime Users</div>
 </div>
 
 <div class="account-section">
@@ -177,6 +203,18 @@
         </form>
         <div id="status" style="display: none;"></div>
     </div>
+</div>
+<div class="footer">
+    <a href="https://github.com/calculatorlib/ga-realtime-users" id="githubLink" style="display: flex; color: #5f6368; text-decoration: none; margin-bottom: 1rem; justify-content: center;" target="_blank">
+        <svg class="github-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="margin-right: 5px;">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"></path>
+        </svg>
+        Open Source
+    </a>
+    <a target="_blank" class="footer-content" href="https://calculatorlib.com/?utm_source=ga-extensions">
+        <img style="margin-right: 5px" src="https://calculatorlib.com/static/logo.svg" alt="CalculatorLib" width="24" height="24">
+        <span>Powered by CalculatorLib</span>
+    </a>
 </div>
 
 <script src="popup.js"></script>
