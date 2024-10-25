@@ -102,7 +102,7 @@ function renderProperties() {
         html += `
       <div class="property-card">
         <div class="property-name">${property.name}</div>
-        <div class="property-id">ID: ${property.id}</div>
+        <div class="property-id">ID: <a style="text-decoration: none; color: #5f6368;" target="_blank" title="Open Google Analytics" href="https://analytics.google.com/analytics/web/#/p${property.id}/realtime/overview">${property.id}</a></div>
         ${userCount}
         <button class="remove-btn" data-property-id="${property.id}" 
                 style="background: #dc3545; float: right; margin-top: -40px;">
