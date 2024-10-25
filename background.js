@@ -27,18 +27,40 @@ chrome.storage.local.get(['monitoredProperties'], (result) => {
     }
 });
 
+function formatBadgeNumber(number) {
+    if (number >= 1000000) {
+        // For millions
+        const millions = Math.floor(number / 1000000);
+        const decimal = Math.floor((number % 1000000) / 100000);
+        return `${millions},${decimal}m`;
+    } else if (number >= 1000) {
+        // For thousands
+        const thousands = Math.floor(number / 1000);
+        const decimal = Math.floor((number % 1000) / 100);
+        return `${thousands},${decimal}k`;
+    }
+    return number.toString();
+}
+
 function updateBadgeAndTooltip(properties) {
     const totalUsers = properties.reduce((sum, prop) => {
         return sum + (prop.error ? 0 : (prop.activeUsers || 0));
     }, 0);
 
+    // Format badge text
+    const badgeText = formatBadgeNumber(totalUsers);
+
     // Update badge
-    chrome.action.setBadgeText({ text: totalUsers.toString() });
+    chrome.action.setBadgeText({ text: badgeText });
     chrome.action.setBadgeBackgroundColor({ color: '#1a73e8' });
 
-    // Update tooltip
+    // Update tooltip with full numbers
     const tooltipText = properties.length === 0 ? 'No properties monitored' :
-        properties.map(p => `${p.name}: ${p.error ? 'Error' : (p.activeUsers || 0)} users`).join('\n');
+        properties.map(p => {
+            const userCount = p.error ? 'Error' :
+                `${formatBadgeNumber(p.activeUsers || 0)} (${(p.activeUsers || 0).toLocaleString()})`;
+            return `${p.name}: ${userCount} users`;
+        }).join('\n');
 
     chrome.action.setTitle({ title: tooltipText });
 }

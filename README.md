@@ -4,6 +4,8 @@ A Chrome extension that helps you monitor multiple Google Analytics properties i
 
 ![GA Realtime Users Badge](/screenshots/badge-preview.png)
 
+![GA Realtime Users Badge with Long Number](/screenshots/badge-preview2.png)
+
 ## 🌟 Key Features
 
 ### Live Badge Counter
