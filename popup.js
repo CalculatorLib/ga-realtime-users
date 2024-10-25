@@ -60,7 +60,7 @@ chrome.storage.local.get(['monitoredProperties'], (result) => {
     }
 });
 
-// Listen for updates from background script
+// Listen for updates from a background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "updateData") {
         updatePropertyData(request.properties);
@@ -262,7 +262,6 @@ function getAuthToken() {
         });
     });
 }
-
 
 function showStatus(message, type) {
     const status = document.getElementById('status');
