@@ -28,7 +28,8 @@ function updateBadgeAndTooltip(properties) {
 
 async function getGAData(propertyId) {
     try {
-        const token = await getAuthToken();
+        // First try non-interactive token
+        let token = await getAuthToken(false);
 
         const response = await fetch(
             `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`,
@@ -50,13 +51,6 @@ async function getGAData(propertyId) {
         );
 
         if (!response.ok) {
-            if (response.status === 401) {
-                // Token expired, remove it and try again
-                await new Promise((resolve) => {
-                    chrome.identity.removeCachedAuthToken({ token }, resolve);
-                });
-                return getGAData(propertyId); // Retry once
-            }
             throw new Error(`GA API Error: ${response.statusText}`);
         }
 
@@ -76,9 +70,9 @@ async function getGAData(propertyId) {
     }
 }
 
-function getAuthToken() {
+function getAuthToken(interactive = false) {
     return new Promise((resolve, reject) => {
-        chrome.identity.getAuthToken({ interactive: true }, function(token) {
+        chrome.identity.getAuthToken({ interactive }, function(token) {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {

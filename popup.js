@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await updateUserInfo();
 });
 
+async function checkAuthToken() {
+    return new Promise((resolve) => {
+        chrome.identity.getAuthToken({ interactive: false }, (token) => {
+            resolve(token || null);
+        });
+    });
+}
+
 function loadProperties() {
     chrome.storage.local.get(['monitoredProperties'], (result) => {
         if (result.monitoredProperties) {
@@ -16,10 +24,15 @@ function loadProperties() {
 }
 
 async function updateUserInfo() {
+    const userEmailElement = document.getElementById('userEmail');
     const logoutBtn = document.getElementById('logoutBtn');
 
     try {
-        const token = await getAuthToken();
+        const token = await checkAuthToken(); // Use non-interactive check
+        if (!token) {
+            throw new Error('No token');
+        }
+
         const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -29,12 +42,12 @@ async function updateUserInfo() {
         if (!response.ok) throw new Error('Failed to fetch user info');
 
         const data = await response.json();
-        document.getElementById('userEmail').textContent = data.email;
-        logoutBtn.style.display = 'block'; // Show logout button when signed in
+        userEmailElement.textContent = data.email;
+        logoutBtn.style.display = 'block';
     } catch (error) {
         console.error('Error fetching user info:', error);
-        document.getElementById('userEmail').textContent = 'Not signed in';
-        logoutBtn.style.display = 'none'; // Hide logout button when not signed in
+        userEmailElement.textContent = 'Not signed in';
+        logoutBtn.style.display = 'none';
     }
 }
 
@@ -112,43 +125,21 @@ function renderProperties() {
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
-        // Get current token
-        const token = await new Promise((resolve, reject) => {
-            chrome.identity.getAuthToken({ interactive: false }, (token) => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                } else {
-                    resolve(token);
-                }
-            });
-        });
-
+        const token = await checkAuthToken();
         if (token) {
             // Revoke token with Google
             await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`);
 
             // Remove token from Chrome's cache
-            await new Promise((resolve, reject) => {
-                chrome.identity.removeCachedAuthToken({ token }, () => {
-                    if (chrome.runtime.lastError) {
-                        reject(chrome.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
+            await new Promise((resolve) => {
+                chrome.identity.removeCachedAuthToken({ token }, resolve);
+            });
+
+            // Clear all cached auth tokens
+            await new Promise((resolve) => {
+                chrome.identity.clearAllCachedAuthTokens(resolve);
             });
         }
-
-        // Clear all cached auth tokens
-        await new Promise((resolve, reject) => {
-            chrome.identity.clearAllCachedAuthTokens(() => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
-                } else {
-                    resolve();
-                }
-            });
-        });
 
         // Clear local properties
         monitoredProperties.clear();
@@ -156,15 +147,12 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 
         // Update UI
         renderProperties();
-        await updateUserInfo(); // This will hide the logout button
+        await updateUserInfo();
 
         showStatus('Successfully signed out', 'success');
 
-        // Notify a background script
+        // Notify background script
         chrome.runtime.sendMessage({ action: "userLoggedOut" });
-
-        // Force token refresh on next login attempt
-        chrome.runtime.sendMessage({ action: "clearIdentityToken" });
 
     } catch (error) {
         console.error('Logout error:', error);
@@ -179,8 +167,18 @@ document.getElementById('addPropertyForm').addEventListener('submit', async (e) 
     const propertyName = document.getElementById('propertyName').value;
 
     try {
+        // Get token with interactive mode only when adding property
+        const token = await new Promise((resolve, reject) => {
+            chrome.identity.getAuthToken({ interactive: true }, (token) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(token);
+                }
+            });
+        });
+
         // Validate property ID
-        const token = await getAuthToken();
         const response = await fetch(
             `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`,
             {
@@ -208,6 +206,7 @@ document.getElementById('addPropertyForm').addEventListener('submit', async (e) 
         await saveProperties();
         e.target.reset();
         showStatus('Property added successfully', 'success');
+        await updateUserInfo(); // Update UI to show user info
         requestUpdate();
     } catch (error) {
         showStatus(error.message, 'error');
