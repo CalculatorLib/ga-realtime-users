@@ -2,6 +2,23 @@ const POLLING_INTERVAL = 60000; // 10 seconds
 let monitoredProperties = new Map();
 let pollInterval = null;
 
+// Installation handler
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === 'install') {
+        // Open welcome page when extension is installed
+        chrome.tabs.create({
+            url: 'https://calculatorlib.com/?screen=install&utm_source=chrome-extension'
+        });
+    }
+});
+
+// Uninstallation URL
+chrome.runtime.setUninstallURL('https://calculatorlib.com/?screen=uninstall&utm_source=chrome-extension', () => {
+    if (chrome.runtime.lastError) {
+        console.error('Error setting uninstall URL:', chrome.runtime.lastError);
+    }
+});
+
 // Initialize properties from storage
 chrome.storage.local.get(['monitoredProperties'], (result) => {
     if (result.monitoredProperties) {
