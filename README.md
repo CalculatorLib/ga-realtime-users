@@ -36,12 +36,13 @@ A Chrome extension that helps you monitor multiple Google Analytics properties i
 
 ## Installation
 
-1. Install from Chrome Web Store:
-   - Visit [Chrome Web Store](https://chrome.google.com/webstore/category/extensions)
-   - Search for "GA Realtime Users"
-   - Click "Add to Chrome"
+### Install from Chrome Web Store (Recommended)
 
-2. Manual Installation:
+[![Available in the Chrome Web Store](/assets/images/ChromeWebStore_BadgeWBorder_v2_340x96.png)](https://chrome.google.com/webstore/detail/ga-realtime-users/fkmcjfffffjdihogfglmhappkejkccnc)
+
+You can also use this direct link: [GA Realtime Users](https://chrome.google.com/webstore/detail/ga-realtime-users/fkmcjfffffjdihogfglmhappkejkccnc)
+
+### Manual Installation
    ```bash
    # Clone this repository
    git clone https://github.com/calculatorlib/ga-realtime-users.git
