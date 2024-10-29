@@ -43,13 +43,21 @@ function formatBadgeNumber(number) {
 }
 
 function updateBadgeAndTooltip(properties) {
-    // Only count favorite properties for the badge
-    const favoriteUsers = properties.reduce((sum, prop) => {
-        return sum + (prop.error ? 0 : (prop.favorite ? (prop.activeUsers || 0) : 0));
+    // Check if there are any favorite properties
+    const hasFavorites = properties.some(prop => prop.favorite);
+
+    // Calculate users based on favorite status
+    const totalUsers = properties.reduce((sum, prop) => {
+        if (prop.error) return sum;
+        // If no favorites exist, count all properties
+        if (!hasFavorites || prop.favorite) {
+            return sum + (prop.activeUsers || 0);
+        }
+        return sum;
     }, 0);
 
     // Format badge text
-    const badgeText = formatBadgeNumber(favoriteUsers);
+    const badgeText = formatBadgeNumber(totalUsers);
 
     // Update badge
     chrome.action.setBadgeText({ text: badgeText });
