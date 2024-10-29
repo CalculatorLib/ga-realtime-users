@@ -176,6 +176,32 @@
             margin-bottom: 1rem;
             justify-content: center;
         }
+
+        .property-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .star-btn {
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+        }
+
+        .star-btn:hover {
+            background-color: rgba(95, 99, 104, 0.1);
+        }
+
+        .star-btn.favorite {
+            color: #f8c022;
+        }
+
+        .star-btn.favorite svg {
+            fill: currentColor;
+        }
     </style>
 </head>
 <body>

@@ -1,5 +1,10 @@
 let monitoredProperties = new Map();
 
+const STAR_ICON_SVG = `
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+</svg>`;
+
 document.addEventListener('DOMContentLoaded', async () => {
     loadProperties();
     await updateUserInfo();
@@ -101,8 +106,16 @@ function renderProperties() {
 
         html += `
       <div class="property-card">
-        <div class="property-name">${property.name}</div>
-        <div class="property-id">ID: <a style="text-decoration: none; color: #5f6368;" target="_blank" title="Open Google Analytics" href="https://analytics.google.com/analytics/web/#/p${property.id}/realtime/overview">${property.id}</a></div>
+        <div class="property-info">
+            <div class="info">
+                <div class="property-name">${property.name}</div>
+                <div class="property-id">ID: <a style="text-decoration: none; color: #5f6368;" target="_blank" title="Open Google Analytics" href="https://analytics.google.com/analytics/web/#/p${property.id}/realtime/overview">${property.id}</a></div>
+            </div>
+            <div class="action">
+                <div role="button" class="star-btn${property.favorite ? ' favorite' : ''}" 
+                  data-property-id="${property.id}" tabindex="0">${STAR_ICON_SVG}</div>
+            </div>
+        </div>
         ${userCount}
         <button class="remove-btn" data-property-id="${property.id}" 
                 style="background: #dc3545; float: right; margin-top: -40px;">
@@ -121,6 +134,24 @@ function renderProperties() {
             await removeProperty(propertyId);
         });
     });
+
+    // Add event listeners for star buttons
+    document.querySelectorAll('.star-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            const propertyId = e.target.closest('.star-btn').dataset.propertyId;
+            await toggleFavorite(propertyId);
+        });
+    });
+}
+
+async function toggleFavorite(propertyId) {
+    const property = monitoredProperties.get(propertyId);
+    if (property) {
+        property.favorite = !property.favorite;
+        monitoredProperties.set(propertyId, property);
+        await saveProperties();
+        renderProperties();
+    }
 }
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
@@ -200,7 +231,8 @@ document.getElementById('addPropertyForm').addEventListener('submit', async (e) 
         monitoredProperties.set(propertyId, {
             id: propertyId,
             name: propertyName,
-            activeUsers: 0
+            activeUsers: 0,
+            favorite: false // Initialize favorite status
         });
 
         await saveProperties();
